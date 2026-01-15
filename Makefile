@@ -1,12 +1,15 @@
 IMAGE_NAME := bun-test
 CONTAINER_NAME := bun-server
 
-.PHONY: init start build run stop clean prune
+.PHONY: init start build run stop clean prune test
 
 init:
 	bun install
 	cd client && bun install && bun run build && cd ..
 	rm -f dist && ln -s client/dist dist
+
+test:
+	bun test
 
 start: init
 	bun run index.ts
