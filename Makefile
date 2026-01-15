@@ -1,7 +1,7 @@
 IMAGE_NAME := bun-test
 CONTAINER_NAME := bun-server
 
-.PHONY: build run stop clean
+.PHONY: init start build run stop clean prune
 
 init:
 	bun install

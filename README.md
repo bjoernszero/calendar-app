@@ -1,5 +1,5 @@
-# Simple Calendar App created with Antigravity
+# Simple calendar app created with Antigravity
 
-See Makefile for instructions.
+See Makefile for build instructions.
 
 Requires bun to build locally.
