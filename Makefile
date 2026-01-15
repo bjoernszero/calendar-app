@@ -8,7 +8,7 @@ init:
 	cd client && bun install && bun run build && cd ..
 	rm -f dist && ln -s client/dist dist
 
-start:
+start: init
 	bun run index.ts
 
 build:

@@ -13,14 +13,14 @@ const server = Bun.serve({
         }
 
         if (url.pathname === "/api/bookings" && req.method === "POST") {
-            const body = await req.json() as { name: string, email: string, date: string, time: string, reason: string };
-            const { name, email, date, time, reason } = body;
+            const body = await req.json() as { name: string, email: string, date: string, time: string, reason: string, image?: string };
+            const { name, email, date, time, reason, image } = body;
 
             // Simple validation could go here
 
             try {
-                const insert = db.prepare("INSERT INTO bookings (name, email, date, time, reason) VALUES (?, ?, ?, ?, ?)");
-                insert.run(name, email, date, time, reason);
+                const insert = db.prepare("INSERT INTO bookings (name, email, date, time, reason, image) VALUES (?, ?, ?, ?, ?, ?)");
+                insert.run(name, email, date, time, reason, image || null);
                 return new Response(JSON.stringify({ success: true }), {
                     headers: { "Content-Type": "application/json" }
                 });
@@ -56,8 +56,8 @@ const server = Bun.serve({
         }
 
         if (url.pathname === "/api/bookings" && req.method === "PUT") {
-            const body = await req.json() as { id: number, name: string, email: string, date: string, time: string, reason: string };
-            const { id, name, email, date, time, reason } = body;
+            const body = await req.json() as { id: number, name: string, email: string, date: string, time: string, reason: string, image?: string };
+            const { id, name, email, date, time, reason, image } = body;
 
             if (!id) {
                 return new Response(JSON.stringify({ success: false, error: "Missing id" }), {
@@ -67,8 +67,8 @@ const server = Bun.serve({
             }
 
             try {
-                const query = db.prepare("UPDATE bookings SET name = ?, email = ?, date = ?, time = ?, reason = ? WHERE id = ?");
-                query.run(name, email, date, time, reason, id);
+                const query = db.prepare("UPDATE bookings SET name = ?, email = ?, date = ?, time = ?, reason = ?, image = ? WHERE id = ?");
+                query.run(name, email, date, time, reason, image || null, id);
                 return new Response(JSON.stringify({ success: true }), {
                     headers: { "Content-Type": "application/json" }
                 });

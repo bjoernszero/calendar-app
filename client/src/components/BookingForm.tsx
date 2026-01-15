@@ -11,6 +11,18 @@ const BookingForm: React.FC = () => {
     const [date, setDate] = useState<any>(new Date());
     const [time, setTime] = useState('');
     const [reason, setReason] = useState('');
+    const [image, setImage] = useState('');
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,7 +30,7 @@ const BookingForm: React.FC = () => {
         // Format date to YYYY-MM-DD
         const formattedDate = date ? date.toISOString().split('T')[0] : '';
 
-        const booking = { name, email, date: formattedDate, time, reason };
+        const booking = { name, email, date: formattedDate, time, reason, image };
 
         try {
             const response = await fetch('/api/bookings', {
@@ -70,6 +82,21 @@ const BookingForm: React.FC = () => {
                 <div className="form-group">
                     <label>Reason for Visit</label>
                     <textarea rows={3} value={reason} onChange={e => setReason(e.target.value)} required placeholder="Reason..." />
+                </div>
+
+                <div className="form-group">
+                    <label>Upload Image (Optional)</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={handleImageChange}
+                    />
+                    {image && (
+                        <div style={{ marginTop: '10px' }}>
+                            <img src={image} alt="Preview" style={{ maxWidth: '100%', borderRadius: '8px', maxHeight: '200px', objectFit: 'cover' }} />
+                        </div>
+                    )}
                 </div>
 
                 <button type="submit">Confirm Booking</button>

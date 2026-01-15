@@ -11,6 +11,7 @@ interface Booking {
     date: string;
     time: string;
     reason: string;
+    image?: string;
 }
 
 const BookingList: React.FC = () => {
@@ -48,6 +49,17 @@ const BookingList: React.FC = () => {
     const handleEditClick = (booking: Booking) => {
         setEditingBooking(booking);
         setIsModalOpen(true);
+    };
+
+    const handleEditImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && editingBooking) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setEditingBooking({ ...editingBooking, image: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleUpdate = async (e: React.FormEvent) => {
@@ -96,6 +108,11 @@ const BookingList: React.FC = () => {
                                     </button>
                                 </div>
                             </div>
+                            {booking.image && (
+                                <div style={{ marginBottom: '16px' }}>
+                                    <img src={booking.image} alt="Booking Attachment" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'cover' }} />
+                                </div>
+                            )}
                             <div className="detail-row">
                                 <span className="label">Email:</span>
                                 <span>{booking.email}</span>
@@ -138,6 +155,19 @@ const BookingList: React.FC = () => {
                             <div className="form-group">
                                 <label>Reason</label>
                                 <textarea rows={3} value={editingBooking.reason} onChange={e => setEditingBooking({ ...editingBooking, reason: e.target.value })} required />
+                            </div>
+                            <div className="form-group">
+                                <label>Image</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleEditImageChange}
+                                />
+                                {editingBooking.image && (
+                                    <div style={{ marginTop: '10px' }}>
+                                        <img src={editingBooking.image} alt="Preview" style={{ maxWidth: '100px', borderRadius: '4px' }} />
+                                    </div>
+                                )}
                             </div>
                             <div className="form-actions">
                                 <button type="button" className="btn btn-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
