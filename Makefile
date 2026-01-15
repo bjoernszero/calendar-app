@@ -1,7 +1,7 @@
 IMAGE_NAME := bun-test
 CONTAINER_NAME := bun-server
 
-.PHONY: init start build run stop clean prune test
+.PHONY: init start build run stop clean prune test createdb
 
 init:
 	bun install
@@ -10,6 +10,11 @@ init:
 
 test:
 	bun test
+
+createdb:
+	rm -f bookings.sqlite
+	bun -e 'import "./db.ts"'
+	@echo "New database created."
 
 start: init
 	bun run index.ts
