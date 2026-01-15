@@ -1,4 +1,4 @@
-# Simple Calendar App created with Antigravity and Gemini 3
+# Simple Calendar App created with Antigravity
 
 See Makefile for instructions.
 
