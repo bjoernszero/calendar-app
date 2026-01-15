@@ -6,6 +6,7 @@ CONTAINER_NAME := bun-server
 init:
 	bun install
 	cd client && bun install && bun run build && cd ..
+	rm -f dist && ln -s client/dist dist
 
 start:
 	bun run index.ts
