@@ -26,6 +26,9 @@ RUN bun run build
 WORKDIR /app
 RUN rm -rf dist && mv client/dist dist
 
+# Perform unit tests
+RUN bun test
+
 # Expose port
 EXPOSE 8080
 
