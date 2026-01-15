@@ -26,6 +26,10 @@ RUN bun run build
 WORKDIR /app
 RUN rm -rf dist && mv client/dist dist
 
+# Create a new database
+RUN rm -f bookings.sqlite
+RUN bun -e 'import "./db.ts"'
+
 # Perform unit tests
 RUN bun test
 
